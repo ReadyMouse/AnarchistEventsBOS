@@ -68,6 +68,18 @@ const MainEventSourceData = [
                 className: 'starlight',
                 url: 'https://www.eventbrite.com/o/starlight-square-31300867995'
             },
+            {
+                name: 'LGBTQ Night Life - Events',
+                id: 'lgbtq-night-life',
+                className: 'lgbtq-night-life',
+                url: 'https://www.eventbrite.com/o/lgbtq-nightlife-events-33774307717'
+            },
+			{
+                name: 'Frolic',
+                id: 'frolic',
+                className: 'frolic',
+                url: 'https://www.eventbrite.com/o/frolic-17820919280'
+            }
         ]
     },
     {
