@@ -116,7 +116,19 @@ const MainEventSourceData = [
                 useCorsProxy: true
             }
         ]
-    }
+    },
+	{
+		sourceType: 'Tockify',
+        options: {},
+        sources: [
+            {
+                name: 'Midway Cafe',
+                id: 'midway-cafe',
+                className: 'midway-cafe',
+                url: 'https://tockify.com/api/ngevent?max=100&calname=midwaycafejp&start-inclusive=true&longForm=true&showAll=true',
+            }
+		]
+	}
 ];
 
 export default MainEventSourceData;
