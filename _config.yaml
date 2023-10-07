@@ -7,16 +7,16 @@
 #####################################################################
 
 # Site settings
-title: Anarchism Dot NYC
+title: Anarchism Dot BOS
 tagline:
-description: Events and happenings in the Anarchist jurisdiction (lmao) of New York City. Stop scrolling insta to find the move.<br />Mostly for the girls, gays, and theys, heavy on the queer because of course we fucking are.
+description: Events and happenings in the Anarchist jurisdiction (lmao) of Boston. Stop scrolling insta to find the move.<br />Mostly for the girls, gays, and theys, heavy on the queer because of course we fucking are.
 lang: "en_US" # The primary human language you write in.
 timezone: "America/New_York"
 type: Website
 logo: &logo static/img/BlackFlagSymbol.svg
 
 author:
-  name: Anarcho-Tech NYC
+  name: A Rogue Queer
   email:
 
 # List of other sites to link to in the site footer
