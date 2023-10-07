@@ -42,7 +42,7 @@ const MainEventSourceData = [
                 name: 'Skip the Small Talk',
                 id: 'skip-the-small-talk',
                 className: 'skip-the-small-talk',
-                url: 'https://www.eventbrite.com/o/adhoc-presents-new-york-17573655465'
+                url: 'https://www.eventbrite.com/o/skip-the-small-talk-10841599652'
             },
             {
                 name: 'Queerlective',
