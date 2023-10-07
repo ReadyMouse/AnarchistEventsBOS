@@ -88,6 +88,18 @@ const MainEventSourceData = [
             color: 'gray'
         },
         sources: [
+            {
+                name: 'Queers on Wheels (roller)',
+                id: 'queers-on-wheels-roller',
+                className: 'queers-on-wheels-roller',
+                url: 'https://calendar.google.com/calendar/ical/0da41c0bb3bb9066f7c20d59285bf1b8780462f3001dbc9ae2f6f461839330f9%40group.calendar.google.com/public/basic.ics'
+            },
+			{
+                name: 'Friendly to Anarchism.BOS',
+                id: 'friendly-to',
+                className: 'friendly-to',
+                url: 'https://calendar.google.com/calendar/ical/f99add0f125468e94ed1852665a37befae2169dbff40bcad887a84a27efc6f85%40group.calendar.google.com/public/basic.ics'
+            }
         ]
     },
     {
