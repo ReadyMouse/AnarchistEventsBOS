@@ -79,6 +79,12 @@ const MainEventSourceData = [
                 id: 'frolic',
                 className: 'frolic',
                 url: 'https://www.eventbrite.com/o/frolic-17820919280'
+            },
+			{
+                name: 'Boston League of Wicked Wrestlers',
+                id: 'bloww',
+                className: 'bloww',
+                url: 'https://www.eventbrite.com/o/boston-league-of-wicked-wrestlers-46228186873'
             }
         ]
     },
@@ -116,6 +122,21 @@ const MainEventSourceData = [
             }
         ]
     },
+	{
+		sourceType: 'ics',
+        options: {
+            format: 'ics'
+        },
+        sources: [
+            {
+                name: 'QuICK Climbing',
+                id: 'quick-climbing',
+                className: 'quick-climbing',
+                url: 'https://app.rockgympro.com/ical/public/b72ed9f7a61c41548e0b3bc4d0aad91c/',
+				useCorsProxy: true
+			}
+		]
+	},
     {
         sourceType: 'ModernEventsCalendarEvents',
         options: {},
@@ -125,7 +146,7 @@ const MainEventSourceData = [
                 id: 'club-cafe',
                 className: 'club-cafe',
                 url: 'https://www.clubcafe.com/full-calendar/',
-                useCorsProxy: true
+				useCorsProxy: true
             }
         ]
     },
