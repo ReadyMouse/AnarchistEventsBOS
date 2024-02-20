@@ -1,14 +1,14 @@
-# NYCAnarchistEvents
+# BostonAnarchistEvents
 
-You can [see me live here](https://anarchism.nyc).
+You can [see me live here](https://anarchism.boston).
 
 # Developing locally
 
 The easiest way to develop this project is to use [the provided Vagrant environment](Vagrantfile). You'll need to install [Vagrant](https://vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/). Then clone the repository and invoke `vagrant up` in the project's root directory:
 
 ```shell
-git clone https://github.com/AnarchoTechNYC/NYCAnarchistEvents.git
-cd NYCAnarchistEvents
+git clone https://github.com/AnarchoTechNYC/AnarchistEventsBOS.git
+cd AnarchistEventsBOS
 vagrant up
 ```
 
