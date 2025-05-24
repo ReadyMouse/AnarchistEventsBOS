@@ -33,7 +33,7 @@ export default function WordPressTribeEvents (optionsObj) {
 WordPressTribeEvents.prototype.fetchAll = async function (url) {
     await this.fetch(url);
     this.parse();
-    while (this.json.next_rest_url) {
+    while (this.json && this.json.next_rest_url) {
         await this.fetch(new URL(this.json.next_rest_url));
         this.parse();
     }
@@ -41,57 +41,72 @@ WordPressTribeEvents.prototype.fetchAll = async function (url) {
 };
 
 WordPressTribeEvents.prototype.fetch = async function (url) {
-    var url = (this.useCorsProxy) ? useCorsProxy(url) : url;
-    var response = await fetch(url);
-    var json = {};
     try {
-        var json = await response.json();
-    } catch (e) {
-        // We'll just print the error, but execution will continue as
-        // we have still caught the error.
-        console.error(e);
+        const proxiedUrl = this.useCorsProxy ? useCorsProxy(url) : url;
+        const response = await fetch(proxiedUrl);
+        
+        if (!response.ok) {
+            console.error(`WordPress Tribe Events API error: ${response.status} ${response.statusText}`);
+            this.json = { events: [] };
+            return this;
+        }
+        
+        try {
+            this.json = await response.json();
+        } catch (e) {
+            console.error('Failed to parse WordPress Tribe Events response:', e);
+            this.json = { events: [] };
+        }
+    } catch (error) {
+        console.error('Error fetching WordPress Tribe Events:', error);
+        this.json = { events: [] };
     }
-    this.json = json;
     return this;
 };
 
 WordPressTribeEvents.prototype.parse = function () {
-    this.events = this.events.concat(this.json.events);
+    if (this.json && Array.isArray(this.json.events)) {
+        this.events = this.events.concat(this.json.events);
+    }
     return this;
 };
 
 WordPressTribeEvents.prototype.toFullCalendarEventObject = function (e) {
-    var geoJSON = (e.venue.geo_lat && e.venue.geo_lng)
+    if (!e) return null;
+    
+    var geoJSON = (e.venue && e.venue.geo_lat && e.venue.geo_lng)
         ? {
             type: "Point",
             coordinates: [e.venue.geo_lng, e.venue.geo_lat]
         }
         : null;
-    return new FullCalendarEvent({
-        title: e.title,
-        start: new Date(e.utc_start_date + 'Z'),
-        end: new Date(e.utc_end_date + 'Z'),
-        url: e.url,
-        extendedProps: {
-            description: e.description,
-            image: e.image.url,
-            location: {
-                geoJSON: geoJSON,
-                eventVenue: {
-                    name: e.venue.venue,
-                    address: {
-                        streetAddress: e.venue.address,
-                        addressLocality: e.venue.city,
-                        //addressRegion: e.venue.state,
-                        postalCode: e.venue.zip,
-                        addressCountry: e.venue.country
-                    },
-                    geo: {
-                        latitude: e.venue.geo_lat,
-                        longitude: e.venue.geo_lng
-                    }
-                }
+
+    var location = e.venue ? {
+        geoJSON: geoJSON,
+        eventVenue: {
+            name: e.venue.venue || '',
+            address: {
+                streetAddress: e.venue.address || '',
+                addressLocality: e.venue.city || '',
+                postalCode: e.venue.zip || '',
+                addressCountry: e.venue.country || ''
+            },
+            geo: {
+                latitude: e.venue.geo_lat || null,
+                longitude: e.venue.geo_lng || null
             }
+        }
+    } : null;
+
+    return new FullCalendarEvent({
+        title: e.title || 'Untitled Event',
+        start: e.utc_start_date ? new Date(e.utc_start_date + 'Z') : null,
+        end: e.utc_end_date ? new Date(e.utc_end_date + 'Z') : null,
+        url: e.url || '',
+        extendedProps: {
+            description: e.description || '',
+            image: e.image && e.image.url ? e.image.url : null,
+            location: location
         }
     });
 };

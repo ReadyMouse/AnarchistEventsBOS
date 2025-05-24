@@ -30,6 +30,9 @@ EventConstructors.GoDaddy = GoDaddy;
 import { default as GoogleCalendar } from './event-sources/google-calendar.js';
 EventConstructors.GoogleCalendar = GoogleCalendar;
 
+import { default as Luma } from './event-sources/luma.js';
+EventConstructors.Luma = Luma;
+
 import { default as SeeTicketsEvents } from './event-sources/seetickets.js';
 EventConstructors.SeeTicketsEvents = SeeTicketsEvents;
 

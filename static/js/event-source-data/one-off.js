@@ -70,41 +70,61 @@ const OneOffEventSources = [
 					var events = [];
 					
 					doc.querySelectorAll('table.full:not(.mobile-view) .view-item-event_calendar').forEach(function ( el ) {
-						var date = el.querySelector('.date-display-single').textContent
-						var [month, day, year, junk1, start_time, junk2, end_time] = date.replaceAll("/", ' ').split(' ');
-						var t24s = Utils.convert12To24HourTime(start_time);						
-						if (end_time) {					
-							var t24e = Utils.convert12To24HourTime(end_time);
-						}
-						events.push({
-							title: el.querySelector('a').textContent,
-							start: new Date(`${month} ${day} ${year} ${t24s}`),
-							end: t24e ? new Date(`${month} ${day} ${year} ${t24e}`) : false,
-							url: `${base_url}${el.querySelector('a').getAttribute('href')}`,
-							extendedProps: {
-								 image: el.querySelector('img').getAttribute('src'),
-								 location: {
-									geoJSON: {
-										type: 'Point',
-										coordinates: ['-71.0866747', '42.3483070']
-									},
-									eventVenue: {
-										name: 'Trident Booksellers & Cafe',
-										address: {
-											streetAddress: '338 Newbury St',
-											addressLocality: 'Boston',
-											addressRegion: 'MA',
-											postalCode: '02115',
-											addressCountry: 'United States'
+						try {
+							var date = el.querySelector('.date-display-single')?.textContent;
+							if (!date) return;
+
+							// Split the date string and clean it up
+							var parts = date.replaceAll("/", ' ').split(' ').filter(Boolean);
+							if (parts.length < 3) return;
+
+							var [month, day, year] = parts;
+							var start_time = parts[4] || '00:00';
+							var end_time = parts[6] || null;
+
+							// Convert times to 24-hour format
+							var t24s = Utils.convert12To24HourTime(start_time);
+							var t24e = end_time ? Utils.convert12To24HourTime(end_time) : null;
+
+							// Create date objects
+							var startDate = new Date(`${month} ${day} ${year} ${t24s}`);
+							var endDate = t24e ? new Date(`${month} ${day} ${year} ${t24e}`) : null;
+
+							// Validate dates
+							if (isNaN(startDate.getTime())) return;
+
+							events.push({
+								title: el.querySelector('a')?.textContent || 'Untitled Event',
+								start: startDate,
+								end: endDate && !isNaN(endDate.getTime()) ? endDate : null,
+								url: `${base_url}${el.querySelector('a')?.getAttribute('href') || ''}`,
+								extendedProps: {
+									image: el.querySelector('img')?.getAttribute('src') || null,
+									location: {
+										geoJSON: {
+											type: 'Point',
+											coordinates: ['-71.0866747', '42.3483070']
 										},
-										geo: {
-											latitude: '42.3483070', 
-											longitude: '-71.0866747'
+										eventVenue: {
+											name: 'Trident Booksellers & Cafe',
+											address: {
+												streetAddress: '338 Newbury St',
+												addressLocality: 'Boston',
+												addressRegion: 'MA',
+												postalCode: '02115',
+												addressCountry: 'United States'
+											},
+											geo: {
+												latitude: '42.3483070', 
+												longitude: '-71.0866747'
+											}
 										}
 									}
 								}
-							}
-						});
+							});
+						} catch (error) {
+							console.error('Error parsing Trident event:', error);
+						}
 					});
 					successCallback(events);
 				}

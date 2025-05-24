@@ -50,35 +50,36 @@ export default class FullCalendarEvent {
      */
     static fromSchemaDotOrg (item) {
         // If we have a `geo` object, format it to geoJSON.
-        var geoJSON = (item.location.geo) ? {
+        var geoJSON = (item.location?.geo) ? {
             type: "Point",
             coordinates: [
                 item.location.geo.longitude,
                 item.location.geo.latitude
             ]
-        } : null; // Otherwise, set it to null.
+        } : null; // Otherwise, set it to null;
+
         return {
-            title: item.name,
-            start: item.startDate,
-            end: item.endDate,
-            url: item.url,
+            title: item.name || 'Untitled Event',
+            start: item.startDate ? new Date(item.startDate) : null,
+            end: item.endDate ? new Date(item.endDate) : null,
+            url: item.url || '',
             extendedProps: {
                 description: item.description || null,
-                image: item.image,
-                location: {
+                image: item.image || null,
+                location: item.location ? {
                     geoJSON: geoJSON,
                     eventVenue: {
-                        name: item.location?.name,
+                        name: item.location.name || null,
                         address: {
-                            streetAddress: item.location?.streetAddress,
-                            addressLocality: item.location?.addressLocality,
-                            addressRegion: item.location?.addressRegion,
-                            postalCode: item.location?.postalCode,
-                            addressCountry: item.location?.addressCountry
+                            streetAddress: item.location.streetAddress || null,
+                            addressLocality: item.location.addressLocality || null,
+                            addressRegion: item.location.addressRegion || null,
+                            postalCode: item.location.postalCode || null,
+                            addressCountry: item.location.addressCountry || null
                         },
-                        geo: item.location?.geo
+                        geo: item.location.geo || null
                     }
-                }
+                } : null
             }
         };
     }

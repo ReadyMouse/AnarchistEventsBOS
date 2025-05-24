@@ -108,6 +108,21 @@ const MainEventSourceData = [
             }
         ]
     },
+    /* Temporarily disabled Luma event source due to CORS issues
+    {
+        sourceType: 'Luma',
+        sources: [{
+            url: 'https://lu.ma/NEAR-community',
+            name: 'NEAR Community Events',
+            useCorsProxy: true
+        },
+        {
+            url: 'https://lu.ma/bostoncreatoreconomy',
+            name: 'Boston Creative Economy',
+            useCorsProxy: true
+        }]
+    },
+    */
     {
         sourceType: 'WordPressTribeEvents',
         options: {

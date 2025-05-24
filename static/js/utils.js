@@ -26,19 +26,29 @@ export function useCorsProxy ( url ) {
  * @return {String} The 24-hour formatted time string, e.g., `"20:00"`.
  */
 export function convert12To24HourTime (str) {
-    var h, m;
-    if ( str.match(/ ?am$/) ) {
-        [h, m] = str.match(/^(\d?\d):(\d\d)/).slice(1);
-        if ( '12' === h ) {
-            h = '00';
+    if (!str) return '00:00';
+    
+    try {
+        var h, m;
+        const timeMatch = str.match(/^(\d?\d):(\d\d)/);
+        if (!timeMatch) return '00:00';
+        
+        [h, m] = timeMatch.slice(1);
+        
+        if (str.match(/ ?am$/i)) {
+            if (h === '12') {
+                h = '00';
+            }
+        } else if (str.match(/ ?pm$/i)) {
+            h = (parseInt(h) + 12).toString();
+            if (h === '24') {
+                h = '12';
+            }
         }
-    } else {
-        h = parseInt(str.match(/^\d?\d/)[0]) + 12;
-        m = str.match(/:(\d\d)/)[1];
-        if ( '24' === h ) {
-            h = '12';
-        }
+        
+        return `${h.padStart(2, '0')}:${m}`;
+    } catch (error) {
+        console.error('Error converting time:', error);
+        return '00:00';
     }
-    h.toString().padStart(2, '0');
-    return [h, m].join(':');
 }

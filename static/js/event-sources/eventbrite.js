@@ -15,14 +15,26 @@ export default function EventBrite ( optionsObj ) {
 
 EventBrite.prototype.fetch = async function (url) {
     var response = await fetch(useCorsProxy(url));
-    var json = {}
+    var json = []
     try {
         var html = await response.text();
         var doc = domparser.parseFromString(html, 'text/html');
-        json = JSON.parse(doc.querySelectorAll('script[type="application/ld+json"]')[1].innerText);
+        var scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+        for (let script of scripts) {
+            try {
+                let data = JSON.parse(script.innerText);
+                if (Array.isArray(data)) {
+                    json = json.concat(data);
+                } else {
+                    json.push(data);
+                }
+            } catch (e) {
+                console.warn('Failed to parse JSON-LD script:', e);
+            }
+        }
     }
     catch (e) {
-        console.error(e);
+        console.error('Failed to fetch or parse EventBrite page:', e);
     }
     this.json = json;
     return this;
@@ -32,6 +44,6 @@ EventBrite.prototype.fetch = async function (url) {
  * @TODO Parse individual occurrences instead of treating as one long event.
  */
 EventBrite.prototype.parse = function () {
-    this.events = this.json.map(FullCalendarEvent.fromSchemaDotOrg);
+    this.events = Array.isArray(this.json) ? this.json.map(FullCalendarEvent.fromSchemaDotOrg) : [];
     return this;
 };
